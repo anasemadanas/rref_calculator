@@ -1,465 +1,439 @@
 # REF / RREF Matrix Solver
 
-A web-based Linear Algebra calculator that solves **Row Echelon Form (REF)** and **Reduced Row Echelon Form (RREF)** problems step by step.
+![REF RREF Solver](assets/img/matrix.png)
 
-The project allows users to enter any matrix size, calculate REF or RREF, and view every row operation used during the solution process.
+A web-based **Linear Algebra** calculator that computes **Row Echelon Form (REF)** and **Reduced Row Echelon Form (RREF)** while displaying every elementary row operation used throughout the solution.
 
-Built using:
+The goal of this project is not only to compute the final answer, but also to help students understand the complete Gaussian Elimination and Gauss-Jordan Elimination process.
 
-* HTML
-* CSS
-* JavaScript
+---
 
-No external libraries are required.
+# Technologies
+
+- HTML5
+- CSS3
+- Vanilla JavaScript
+
+No external libraries or frameworks are required.
 
 ---
 
 # Features
 
-## Matrix Input
+- Dynamic matrix generation
+- Custom number of rows and columns
+- REF Solver
+- RREF Solver
+- Step-by-step solution
+- Original system of equations
+- Final solution display
+- Pivot highlighting
+- Leading 1 highlighting
+- Responsive interface
 
-* User can choose:
+---
 
-  * Number of rows
-  * Number of columns
+# How to Use
 
-* Supports small and large matrices.
+1. Select the number of rows.
+2. Select the number of columns.
+3. Click **Generate Matrix**.
+4. Enter the matrix values.
+5. Click **REF** or **RREF**.
+6. View:
+   - Original System
+   - Result Matrix
+   - Final Solution
+   - Complete Calculation Steps
 
-Example:
+---
 
+# REF and RREF Conditions
+
+Before using the calculator, it is useful to understand the mathematical definitions of **REF** and **RREF**.
+
+## What is a Pivot?
+
+A **pivot** (also called a **leading entry**) is the first non-zero number in a row.
+
+Example
+
+```text
+1 4 5
+0 2 6
+0 0 3
 ```
-1  2  3
-4  5  6
-7  8  9
+
+The pivots are:
+
+- Row 1 → 1
+- Row 2 → 2
+- Row 3 → 3
+
+In RREF, every pivot becomes **1**.
+
+---
+
+## Elementary Row Operations
+
+The calculator only uses the three elementary row operations.
+
+### 1. Swap two rows
+
+```text
+Ri ↔ Rj
+```
+
+Example
+
+```text
+R1 ↔ R2
 ```
 
 ---
 
-## REF Solver
+### 2. Multiply a row by a non-zero constant
 
-Calculates the Row Echelon Form of a matrix.
-
-Example:
-
-Before:
-
-```
-1  2  3
-2  4  6
+```text
+Ri ← kRi
 ```
 
-After REF:
+Example
 
-```
-1  2  3
-0  0  0
+```text
+R2 ← (1/3)R2
 ```
 
 ---
 
-## RREF Solver
+### 3. Add or subtract a multiple of another row
 
-Calculates the Reduced Row Echelon Form using Gauss-Jordan elimination.
-
-Example:
-
-Input:
-
-```
-1 2
-3 4
+```text
+Ri ← Ri + kRj
 ```
 
-Output:
+or
 
+```text
+Ri ← Ri − kRj
 ```
-1 0
-0 1
+
+Example
+
+```text
+R3 ← R3 − 2R1
 ```
 
 ---
 
-## Step-by-Step Explanation
+# Row Echelon Form (REF)
 
-The calculator does not only show the final answer.
+A matrix is in **REF** if it satisfies all of the following conditions.
 
-It displays:
+### 1. All zero rows appear at the bottom.
 
-* Row swaps
-* Row multiplication
-* Row addition/subtraction
-* Pivot normalization
-* Elimination steps
+Example
 
-Example:
-
+```text
+1 2 3
+0 4 5
+0 0 0
 ```
-R₂ = R₂ - 2R₁
-```
-
-Then shows the matrix after the operation.
 
 ---
 
-# How REF Works
+### 2. Every pivot is to the right of the pivot above it.
 
-REF (Row Echelon Form) follows Gaussian Elimination.
+Correct
 
-A matrix is in REF when:
-
-1. All non-zero rows are above zero rows.
-
-Example:
-
+```text
+1 2 3
+0 1 4
+0 0 5
 ```
+
+Incorrect
+
+```text
+1 2 3
+0 0 5
+0 4 6
+```
+
+---
+
+### 3. Every value below each pivot equals zero.
+
+Correct
+
+```text
 1 2 3
 0 4 5
 0 0 6
 ```
 
-2. The first non-zero number in each row (pivot) is to the right of the pivot above it.
+---
 
-3. All values below each pivot are zero.
+# Reduced Row Echelon Form (RREF)
+
+A matrix is in **RREF** if:
+
+- It satisfies all REF conditions.
+- Every pivot equals **1**.
+- Every pivot is the only non-zero value in its column.
+
+Correct
+
+```text
+1 0 5
+0 1 3
+```
+
+Incorrect
+
+```text
+1 2 5
+0 1 3
+```
 
 ---
 
+# How the Algorithms Work
+
 ## REF Algorithm
 
-### Step 1: Find Pivot
+### Step 1 — Find the Pivot
 
-Start from the first column.
+Search the current column for the first non-zero value.
 
-Find the first non-zero element.
+If necessary, swap rows.
 
-Example:
+Example
 
-```
+```text
 0 2 3
 1 4 5
 ```
 
-The first pivot cannot be zero, so swap rows:
+↓
 
-```
+```text
 1 4 5
 0 2 3
 ```
 
-Operation:
+Operation
 
-```
+```text
 R₁ ↔ R₂
 ```
 
 ---
 
-### Step 2: Eliminate Below Pivot
+### Step 2 — Eliminate Values Below the Pivot
 
-Make all numbers below the pivot equal to zero.
+Formula
 
-Formula:
-
-```
-R₂ = R₂ - kR₁
+```text
+Ri = Ri − kRpivot
 ```
 
-where:
+where
 
-```
-k = value below pivot / pivot value
-```
-
-Example:
-
-```
-2
+```text
+k = value below pivot / pivot
 ```
 
-below the pivot:
+Example
 
-```
-R₂ = R₂ - 2R₁
-```
-
-Result:
-
-```
-1 4 5
-0 2 3
+```text
+R₂ = R₂ − 2R₁
 ```
 
 ---
 
-### Step 3: Move To Next Column
+### Step 3 — Move to the Next Pivot
 
-Repeat the process for the next pivot until the matrix reaches REF.
-
----
-
-# How RREF Works
-
-RREF extends REF by adding extra rules:
-
-1. Every pivot must equal 1.
-
-Example:
-
-Before:
-
-```
-2 4
-0 3
-```
-
-Normalize:
-
-```
-R₁ = R₁ / 2
-R₂ = R₂ / 3
-```
-
-Result:
-
-```
-1 2
-0 1
-```
-
----
-
-2. Every pivot column must contain only one non-zero value.
-
-Example:
-
-Before:
-
-```
-1 2
-0 1
-```
-
-Remove the value above pivot:
-
-```
-R₁ = R₁ - 2R₂
-```
-
-Result:
-
-```
-1 0
-0 1
-```
+Repeat until the matrix reaches REF.
 
 ---
 
 # RREF Algorithm
 
-The program performs:
+### Step 1 — Convert to REF
 
-## 1. Convert Matrix to REF
+The algorithm first performs Gaussian Elimination.
 
-First:
+---
 
+### Step 2 — Normalize Pivot Rows
+
+Every pivot is divided by itself so it becomes **1**.
+
+Example
+
+```text
+2 4
+0 3
 ```
-Gaussian Elimination
-```
 
-creates:
+↓
 
-```
-1 * *
-0 1 *
-0 0 1
+```text
+1 2
+0 1
 ```
 
 ---
 
-## 2. Normalize Pivot Rows
+### Step 3 — Eliminate Above Every Pivot
 
-Make every pivot equal to 1.
+Example
 
-Example:
-
-```
-2 4 6
-```
-
-becomes:
-
-```
-1 2 3
-```
-
-Operation:
-
-```
-R₁ = R₁ / 2
-```
-
----
-
-## 3. Eliminate Above Pivots
-
-Remove values above each pivot.
-
-Example:
-
-```
+```text
 1 3
 0 1
 ```
 
-Operation:
+↓
 
-```
-R₁ = R₁ - 3R₂
+```text
+R₁ = R₁ − 3R₂
 ```
 
-Result:
+↓
 
-```
+```text
 1 0
 0 1
 ```
 
 ---
 
-# Code Structure
+# Example Workflow
 
+Input
+
+```text
+1 2 3
+2 5 8
 ```
-rref_calculator/
 
+↓
+
+REF
+
+```text
+1 2 3
+0 1 2
+```
+
+↓
+
+RREF
+
+```text
+1 0 -1
+0 1  2
+```
+
+↓
+
+Solution
+
+```text
+x₁ = -1
+x₂ = 2
+```
+
+---
+
+# Project Structure
+
+```text
+rref_calculator/
 │
 ├── index.html
-│
 ├── style.css
+├── script.js
 │
-└── script.js
+├── assets/
+│   └── img/
+│       └── matrix.png
+│
+└── README.md
 ```
 
 ---
 
 # JavaScript Logic
 
-## Matrix Creation
+## createMatrix()
 
-The user chooses rows and columns.
-
-The program dynamically creates input fields.
-
-Function:
-
-```javascript
-createMatrix()
-```
+Creates the matrix dynamically based on the selected dimensions.
 
 ---
 
-## Reading Matrix
+## getMatrix()
 
-The entered values are converted into a JavaScript array.
-
-Function:
-
-```javascript
-getMatrix()
-```
-
-Example:
-
-HTML inputs:
-
-```
-1 2
-3 4
-```
-
-Converted to:
-
-```javascript
-[
- [1,2],
- [3,4]
-]
-```
+Reads all user inputs and converts them into a JavaScript 2D array.
 
 ---
 
-## REF Function
-
-Main function:
-
-```javascript
-REF(matrix)
-```
+## REF(matrix)
 
 Responsibilities:
 
-* Find pivots
-* Swap rows
-* Eliminate values below pivots
-* Save every step
+- Find pivots
+- Swap rows
+- Eliminate entries below pivots
+- Save every step
 
 ---
 
-## RREF Function
-
-Main function:
-
-```javascript
-RREF(matrix)
-```
+## RREF(matrix)
 
 Responsibilities:
 
-* Apply REF first
-* Normalize pivots
-* Remove values above pivots
-* Generate final reduced matrix
+- Call `REF()`
+- Normalize pivot rows
+- Eliminate entries above pivots
+- Produce the final reduced matrix
 
 ---
 
-## Step Saving
+## saveStep()
 
-Every operation is stored:
-
-```javascript
-saveStep()
-```
-
-Example:
-
-```javascript
-{
- operation:"R2 = R2 - 2R1",
- matrix:[
-  [1,2],
-  [0,3]
- ]
-}
-```
-
-Then displayed to the user.
+Stores every elementary row operation together with the matrix generated after that operation.
 
 ---
 
 # Future Improvements
 
-Possible future features:
-
-* Fraction display
-* LaTeX mathematical rendering
-* Matrix inverse
-* Determinant calculator
-* Vector operations
-* Eigenvalues and eigenvectors
-* Linear equation solver
-* Dark mode
-* Export solution as PDF
+- Fraction rendering
+- LaTeX mathematical notation
+- Matrix inverse
+- Determinant
+- Rank
+- Null Space
+- Column Space
+- Matrix multiplication
+- Matrix addition
+- Matrix subtraction
+- Matrix transpose
+- LU Decomposition
+- QR Decomposition
+- Eigenvalues
+- Eigenvectors
+- Vector operations
+- Linear system solver
+- Export as PDF
+- Dark Mode
 
 ---
 
 # Purpose
 
-This project was created to make Linear Algebra operations easier to understand by showing the complete solving process instead of only displaying the final answer.
+This project was developed as an educational tool for learning **Linear Algebra**.
+
+Instead of displaying only the final answer, the calculator shows every elementary row operation, making it easier to understand how Gaussian Elimination and Gauss-Jordan Elimination work.
