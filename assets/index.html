@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>REF RREF Solver</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<h1>REF / RREF Matrix Solver</h1>
+
+
+
+<div class="controls">
+
+
+<label>
+Rows:
+<input id="rows" type="number" min="1" value="3">
+</label>
+
+
+
+<label>
+Columns:
+<input id="cols" type="number" min="1" value="3">
+</label>
+
+
+
+<button type="button" onclick="createMatrix()">
+Generate Matrix
+</button>
+
+
+</div>
+
+
+
+
+
+<h2>Matrix Input</h2>
+
+<div id="matrixInput"></div>
+
+
+
+
+
+<div class="buttons">
+
+
+<button type="button" onclick="solveREF()">
+REF
+</button>
+
+
+<button type="button" onclick="solveRREF()">
+RREF
+</button>
+
+
+<button type="button" onclick="clearAll()">
+Clear
+</button>
+
+
+</div>
+
+
+
+
+
+
+
+<section>
+
+<h2>Original System</h2>
+
+<div id="originalEquations" class="equations"></div>
+
+</section>
+
+
+
+
+
+
+
+<section class="result-box">
+
+<h2>Result Matrix</h2>
+
+<div id="result"></div>
+
+</section>
+
+
+
+
+
+
+
+<section>
+
+<h2>Solution</h2>
+
+<div id="solutionEquations" class="equations"></div>
+
+</section>
+
+
+
+
+
+
+
+<section class="steps-box">
+
+<h2>Calculation Steps</h2>
+
+<div id="steps"></div>
+
+</section>
+
+
+
+
+</div>
+
+
+
+
+<script src="script.js"></script>
+
+
+</body>
+
+</html>
