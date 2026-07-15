@@ -288,20 +288,22 @@ function cleanRow(row){
     }
 }
 
-function findPivotRow(m,startRow,col){
-    let pivot=-1;
-    let maxAbs=EPSILON;
+function findPivotRow(m, startRow, col) {
 
-    for(let i=startRow;i<m.length;i++){
-        let value=Math.abs(m[i][col]);
-
-        if(value>maxAbs){
-            maxAbs=value;
-            pivot=i;
+    for (let i = startRow; i < m.length; i++) {
+        let value = m[i][col];
+        if (Math.abs(value - 1) < EPSILON || Math.abs(value + 1) < EPSILON) {
+            return i; 
         }
     }
 
-    return pivot;
+    for (let i = startRow; i < m.length; i++) {
+        if (!isNearZero(m[i][col])) {
+            return i; 
+        }
+    }
+
+    return -1; // العمود كله أصفار
 }
 
 function leadingCoefficientIndex(row,variableCount){
