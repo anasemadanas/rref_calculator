@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gaussian elimination</title>
+	<title>REF / RREF Matrix Solver | Linear Algebra Education</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -23,15 +23,15 @@
 </nav>
 
 	<!-- generate -->
-<div class="container">
-		<h1>REF / RREF - Matrix Solver</h1>
+	<div class="container">
+		<h1>REF / RREF Matrix Solver</h1>
 	<div class="controls">
 		<div class="input-group">
 			<label for="rows">Rows</label>
 			<input id="rows" type="number" min="1" max="10" value="3">
 		</div>
 		<div class="input-group">
-			<label for="cols">Variables</label>
+			<label for="cols">Columns</label>
 			<input id="cols" type="number" min="1" max="10" value="3">
 		</div>
 
@@ -47,29 +47,29 @@
 	<!-- buttons -->
 	<div class="buttons">
 		<button type="button" onclick="randomMatrix()">
-		Random Number
+		Random Matrix
 		</button>
 		<button type="button" onclick="zeroMatrix()">
-		Zero
+		Fill with Zeros
 		</button>
 		<button type="button" onclick="playSound('soundCalculate'); solveREF()">
-		REF
+		Solve REF
 		</button>
 		<button type="button" onclick="playSound('soundCalculate'); solveRREF()">
-		RREF
+		Solve RREF
 		</button>
 		<button type="button" onclick="playSound('soundRemove'); clearAll()">
-		Clear
+		Reset All
 		</button>
 	</div>
 
 	<!-- Sections -->
 	<section>
-		<h2>Original System</h2>
+		<h2>Original System of Equations</h2>
 		<div id="originalEquations" class="equations"></div>
 	</section>
 	<section class="result-box">
-		<h2>Final Result Matrix</h2>
+		<h2>Reduced Result Matrix</h2>
 		<div id="result"></div>
 	</section>
 	<section>
@@ -108,10 +108,10 @@
     </div>
 </footer>
 
-<audio id="soundCalculate" src="assets/sounds/btn-calculate.wav"></audio>
-<audio id="soundClick" src="assets/sounds/btn-click.wav"></audio>
-<audio id="soundRemove" src="assets/sounds/btn-remove.wav"></audio>
-<audio id="soundError" src="assets/sounds/error.wav"></audio>
+<audio id="soundCalculate" src="sounds/btn-calculate.wav"></audio>
+<audio id="soundClick" src="sounds/btn-click.wav"></audio>
+<audio id="soundRemove" src="sounds/btn-remove.wav"></audio>
+<audio id="soundError" src="sounds/error.wav"></audio>
 
 <script src="script.js"></script>
 </body>

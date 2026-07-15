@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Algorithms</title>
+    <title>Algorithms Used in REF / RREF Solver</title>
     <link rel="stylesheet" href="../style.css">
 </head>
 
@@ -24,11 +24,13 @@
 <main class="container">
 
 
-<h1>Algorithms</h1>
+<h1>Algorithms Used in the Solver</h1>
 
 
 <p>
-This project implements matrix reduction algorithms using JavaScript.
+This project implements matrix reduction algorithms in JavaScript and
+shows the intermediate steps so students can follow the logic behind
+each transformation.
 </p>
 
 
@@ -36,27 +38,22 @@ This project implements matrix reduction algorithms using JavaScript.
 <h2>Gaussian Elimination (REF)</h2>
 
 <p>
-Gaussian Elimination converts a matrix into Row Echelon Form.
+Gaussian Elimination transforms an augmented matrix into Row Echelon
+Form by eliminating entries below each pivot.
 </p>
 
 
-<h3>Steps:</h3>
+<h3>Steps</h3>
 
 <ol>
 
-<li>Find the pivot element.</li>
+<li>Choose the pivot element with partial pivoting.</li>
 
-<li>
-Swap rows if the pivot is zero.
-</li>
+<li>Swap rows when a better pivot is available in the current column.</li>
 
-<li>
-Eliminate values below the pivot.
-</li>
+<li>Eliminate the values below the pivot.</li>
 
-<li>
-Move to the next column.
-</li>
+<li>Move to the next column and repeat the process.</li>
 
 </ol>
 
@@ -90,8 +87,8 @@ After:
 
 
 <p>
-RREF extends REF by making every pivot equal to 1
-and removing values above pivots.
+RREF extends REF by normalizing each pivot to 1 and eliminating the
+entries above it, producing a matrix that is easier to read directly.
 </p>
 
 
@@ -138,19 +135,19 @@ Reads user input and converts it into a JavaScript array.
 
 <li>
 <b>REF()</b>
-Applies Gaussian Elimination.
+Applies Gaussian Elimination with partial pivoting.
 </li>
 
 
 <li>
 <b>RREF()</b>
-Applies Gauss-Jordan Elimination.
+Applies Gauss-Jordan Elimination and removes coefficients above pivots.
 </li>
 
 
 <li>
 <b>saveStep()</b>
-Stores every operation and matrix state.
+Stores every operation and matrix state for step-by-step display.
 </li>
 
 
@@ -164,6 +161,8 @@ Stores every operation and matrix state.
 <footer>
 &copy; 2026 Anas Emad
 </footer>
+
+<script src="../script.js"></script>
 
 
 </body>

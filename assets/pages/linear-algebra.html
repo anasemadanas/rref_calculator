@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Linear Algebra</title>
+    <title>Linear Algebra Concepts for REF / RREF</title>
     <link rel="stylesheet" href="../style.css">
 </head>
 
@@ -20,18 +20,21 @@
 
 <main class="container">
 
-<h1>Linear Algebra</h1>
+<h1>Linear Algebra Concepts</h1>
 
 <p>
 Linear Algebra is a branch of mathematics that studies vectors,
-matrices, and systems of linear equations.
+matrices, and systems of linear equations. It provides the language
+used to describe many problems in science, engineering, and data
+analysis.
 </p>
 
 
-<h2>Matrix</h2>
+<h2>Matrices</h2>
 
 <p>
-A matrix is a rectangular arrangement of numbers organized into rows and columns.
+A matrix is a rectangular arrangement of numbers organized into rows
+and columns.
 </p>
 
 <pre>
@@ -43,7 +46,8 @@ A matrix is a rectangular arrangement of numbers organized into rows and columns
 <h2>Systems of Linear Equations</h2>
 
 <p>
-A system of equations can be represented using an augmented matrix.
+A system of equations can be represented using an augmented matrix,
+which places the constants in the last column.
 </p>
 
 <pre>
@@ -59,7 +63,7 @@ x₁ + 2x₂ = 5
 <h2>Row Operations</h2>
 
 <p>
-There are three elementary row operations:
+There are three elementary row operations used in Gaussian Elimination:
 </p>
 
 <ul>
@@ -72,14 +76,14 @@ R₁ ↔ R₂
 
 
 <li>
-Multiply a row by a constant:
+Multiply a row by a non-zero constant:
 <br>
 R₁ → kR₁
 </li>
 
 
 <li>
-Add or subtract rows:
+Add or subtract a multiple of one row from another:
 <br>
 R₂ → R₂ + kR₁
 </li>
@@ -88,22 +92,22 @@ R₂ → R₂ + kR₁
 
 
 <p>
-These operations preserve the solution of the linear system.
+These operations preserve the solution set of the linear system.
 </p>
 
 <h2>Types of Solutions</h2>
 
 <p>
-A system of linear equations can have different types of solutions depending on
-the relationship between equations and variables.
+A system of linear equations can have different types of solutions
+depending on the relationship between equations and variables.
 </p>
 
 
-<h3>1. One Unique Solution (Consistent System)</h3>
+<h3>1. Unique Solution</h3>
 
 <p>
-A system has exactly one solution when every variable has a pivot position.
-The number of pivots is equal to the number of variables.
+A system has exactly one solution when every variable corresponds to a
+pivot column and no contradiction appears.
 </p>
 
 <pre>
@@ -121,11 +125,11 @@ x₂ = 2
 </pre>
 
 
-<h3>2. Infinite Solutions (Consistent System)</h3>
+<h3>2. Infinite Solutions</h3>
 
 <p>
-A system has infinitely many solutions when there are free variables.
-This happens when there are fewer pivots than variables and no contradiction exists.
+A system has infinitely many solutions when there are free variables and
+no contradiction appears.
 </p>
 
 <pre>
@@ -134,7 +138,7 @@ This happens when there are fewer pivots than variables and no contradiction exi
 </pre>
 
 <p>
-The second row represents:
+The zero row represents a redundant equation:
 </p>
 
 <pre>
@@ -142,17 +146,17 @@ The second row represents:
 </pre>
 
 <p>
-which is always true, so the system has infinite solutions.
+which is always true, so the system has infinitely many solutions.
 </p>
 
 
 
-<h3>3. No Solution (Inconsistent System)</h3>
+<h3>3. No Solution</h3>
 
 <p>
-A system has no solution when it contains a contradiction.
-In RREF, this appears as a row where all coefficients are zero but the constant
-is not zero.
+A system has no solution when it contains a contradiction. In RREF,
+this appears as a row where all coefficients are zero but the constant
+term is not zero.
 </p>
 
 <pre>
@@ -161,7 +165,7 @@ is not zero.
 </pre>
 
 <p>
-The second row represents:
+The second row represents a contradiction:
 </p>
 
 <pre>
@@ -187,7 +191,7 @@ This is impossible, so the system is inconsistent.
 <tr>
 <td>Consistent</td>
 <td>The equations have at least one solution</td>
-<td>One solution or Infinite solutions</td>
+<td>One solution or infinitely many solutions</td>
 </tr>
 
 <tr>
@@ -203,6 +207,8 @@ This is impossible, so the system is inconsistent.
 <footer>
 &copy; 2026 Anas Emad
 </footer>
+
+<script src="../script.js"></script>
 
 
 </body>

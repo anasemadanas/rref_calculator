@@ -1,6 +1,78 @@
 
 let steps=[];
 const EPSILON=1e-10;
+const SOUND_FILES={
+    soundCalculate:"btn-calculate.wav",
+    soundClick:"btn-click.wav",
+    soundRemove:"btn-remove.wav",
+    soundError:"error.wav"
+};
+const soundCache=new Map();
+let uiSoundsBound=false;
+
+function getSoundSource(id){
+    const fileName=SOUND_FILES[id];
+
+    if(!fileName){
+        return null;
+    }
+
+    const basePath=window.location.pathname.includes("/pages/") ? "../sounds/" : "sounds/";
+    return basePath + fileName;
+}
+
+function getSound(id){
+    const existing=document.getElementById(id);
+
+    if(existing){
+        return existing;
+    }
+
+    if(!soundCache.has(id)){
+        const source=getSoundSource(id);
+
+        if(!source){
+            return null;
+        }
+
+        soundCache.set(id,new Audio(source));
+    }
+
+    return soundCache.get(id);
+}
+
+function bindUiSounds(){
+    if(uiSoundsBound){
+        return;
+    }
+
+    uiSoundsBound=true;
+
+    document.querySelectorAll(".navbar a, .footer-links a").forEach(link=>{
+        link.addEventListener("click",()=>playSound("soundClick"));
+    });
+
+    document.querySelectorAll(".buttons button").forEach(button=>{
+        const text=(button.textContent || "").trim();
+        const inlineHandler=button.getAttribute("onclick") || "";
+
+        if(inlineHandler.includes("soundClick")){
+            return;
+        }
+
+        if(/^(Solve REF|Solve RREF|REF|RREF|Reset All|Clear)$/i.test(text)){
+            return;
+        }
+
+        button.addEventListener("click",()=>playSound("soundClick"));
+    });
+}
+
+if(document.readyState==="loading"){
+    document.addEventListener("DOMContentLoaded",bindUiSounds);
+}else{
+    bindUiSounds();
+}
 
 //create matrix input table
 function createMatrix(){
@@ -657,12 +729,12 @@ function solutionFromRREF(matrix) {
 
 function playSound(id){
 
-    let sound=document.getElementById(id);
+    let sound=getSound(id);
 
     if(sound){
 
         sound.currentTime=0;
-        sound.play();
+        sound.play().catch(()=>{});
 
     }
 
