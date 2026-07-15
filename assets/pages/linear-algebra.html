@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Linear Algebra</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <a href="../index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="linear-algebra.html">Linear Algebra</a>
+    <a href="algorithms.html">Algorithms</a>
+    <a href="contact.html">Contact</a>
+</nav>
+
+
+<main class="container">
+
+<h1>Linear Algebra</h1>
+
+<p>
+Linear Algebra is a branch of mathematics that studies vectors,
+matrices, and systems of linear equations.
+</p>
+
+
+<h2>Matrix</h2>
+
+<p>
+A matrix is a rectangular arrangement of numbers organized into rows and columns.
+</p>
+
+<pre>
+[ 1  2  3 ]
+[ 4  5  6 ]
+</pre>
+
+
+<h2>Systems of Linear Equations</h2>
+
+<p>
+A system of equations can be represented using an augmented matrix.
+</p>
+
+<pre>
+x₁ + 2x₂ = 5
+3x₁ + 4x₂ = 7
+
+
+[ 1  2 | 5 ]
+[ 3  4 | 7 ]
+</pre>
+
+
+<h2>Row Operations</h2>
+
+<p>
+There are three elementary row operations:
+</p>
+
+<ul>
+
+<li>
+Swap two rows:
+<br>
+R₁ ↔ R₂
+</li>
+
+
+<li>
+Multiply a row by a constant:
+<br>
+R₁ → kR₁
+</li>
+
+
+<li>
+Add or subtract rows:
+<br>
+R₂ → R₂ + kR₁
+</li>
+
+</ul>
+
+
+<p>
+These operations preserve the solution of the linear system.
+</p>
+
+<h2>Types of Solutions</h2>
+
+<p>
+A system of linear equations can have different types of solutions depending on
+the relationship between equations and variables.
+</p>
+
+
+<h3>1. One Unique Solution (Consistent System)</h3>
+
+<p>
+A system has exactly one solution when every variable has a pivot position.
+The number of pivots is equal to the number of variables.
+</p>
+
+<pre>
+[ 1  0 | 3 ]
+[ 0  1 | 2 ]
+</pre>
+
+<p>
+Solution:
+</p>
+
+<pre>
+x₁ = 3
+x₂ = 2
+</pre>
+
+
+<h3>2. Infinite Solutions (Consistent System)</h3>
+
+<p>
+A system has infinitely many solutions when there are free variables.
+This happens when there are fewer pivots than variables and no contradiction exists.
+</p>
+
+<pre>
+[ 1  2 | 5 ]
+[ 0  0 | 0 ]
+</pre>
+
+<p>
+The second row represents:
+</p>
+
+<pre>
+0x₁ + 0x₂ = 0
+</pre>
+
+<p>
+which is always true, so the system has infinite solutions.
+</p>
+
+
+
+<h3>3. No Solution (Inconsistent System)</h3>
+
+<p>
+A system has no solution when it contains a contradiction.
+In RREF, this appears as a row where all coefficients are zero but the constant
+is not zero.
+</p>
+
+<pre>
+[ 1  2 | 5 ]
+[ 0  0 | 3 ]
+</pre>
+
+<p>
+The second row represents:
+</p>
+
+<pre>
+0x₁ + 0x₂ = 3
+</pre>
+
+<p>
+This is impossible, so the system is inconsistent.
+</p>
+
+
+
+<h2>Consistent vs Inconsistent Systems</h2>
+
+<table class="info-table">
+
+<tr>
+<th>System Type</th>
+<th>Meaning</th>
+<th>Number of Solutions</th>
+</tr>
+
+<tr>
+<td>Consistent</td>
+<td>The equations have at least one solution</td>
+<td>One solution or Infinite solutions</td>
+</tr>
+
+<tr>
+<td>Inconsistent</td>
+<td>The equations contradict each other</td>
+<td>No solution</td>
+</tr>
+
+</table>
+</main>
+
+
+<footer>
+&copy; 2026 Anas Emad
+</footer>
+
+
+</body>
+
+</html>

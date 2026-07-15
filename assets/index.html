@@ -1,152 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>REF RREF Solver</title>
-
+    <title>Gaussian elimination</title>
     <link rel="stylesheet" href="style.css">
-
 </head>
-
-
 <body>
+<nav class="navbar">
 
+    <a href="index.html">
+        Home
+    </a>
+	<a href="pages/about.html">About</a>
+    <a href="pages/linear-algebra.html">
+        Linear Algebra
+    </a>
+    <a href="pages/algorithms.html">
+        Algorithms
+    </a>
 
+</nav>
+
+	<!-- generate -->
 <div class="container">
+		<h1>REF / RREF - Matrix Solver</h1>
+	<div class="controls">
+		<div class="input-group">
+			<label for="rows">Rows</label>
+			<input id="rows" type="number" min="1" max="10" value="3">
+		</div>
+		<div class="input-group">
+			<label for="cols">Columns</label>
+			<input id="cols" type="number" min="1" max="10" value="3">
+		</div>
 
+	<button type="button" onclick="playSound('soundClick'); createMatrix()">
+	Generate Matrix
+	</button>	
+	</div>
 
-<h1>REF / RREF Matrix Solver</h1>
+	<!-- tables input -->
+	<h2>Matrix Input</h2>
+	<div id="matrixInput"></div>
 
+	<!-- buttons -->
+	<div class="buttons">
+		<button type="button" onclick="randomMatrix()">
+		Random Number
+		</button>
+		<button type="button" onclick="zeroMatrix()">
+		Zero
+		</button>
+		<button type="button" onclick="playSound('soundCalculate'); solveREF()">
+		REF
+		</button>
+		<button type="button" onclick="playSound('soundCalculate'); solveRREF()">
+		RREF
+		</button>
+		<button type="button" onclick="playSound('soundRemove'); clearAll()">
+		Clear
+		</button>
+	</div>
 
-
-<div class="controls">
-
-
-<label>
-Rows:
-<input id="rows" type="number" min="1" value="3">
-</label>
-
-
-
-<label>
-Columns:
-<input id="cols" type="number" min="1" value="3">
-</label>
-
-
-
-<button type="button" onclick="createMatrix()">
-Generate Matrix
-</button>
-
-
+	<!-- Sections -->
+	<section>
+		<h2>Original System</h2>
+		<div id="originalEquations" class="equations"></div>
+	</section>
+	<section class="result-box">
+		<h2>Final Result Matrix</h2>
+		<div id="result"></div>
+	</section>
+	<section>
+		<h2>Solution</h2>
+		<div id="solutionEquations" class="equations"></div>
+	</section>
+	<section>
+		<h2>Solution Type</h2>
+		<div id="solutionType" class="solution-type">
+	</div>
+	</section>
+	<section class="steps-box">
+		<h2>Calculation Steps</h2>
+		<div id="steps"></div>
+	</section>
 </div>
 
-
-
-
-
-<h2>Matrix Input</h2>
-
-<div id="matrixInput"></div>
-
-
-
-
-
-<div class="buttons">
-
-
-<button type="button" onclick="solveREF()">
-REF
-</button>
-
-
-<button type="button" onclick="solveRREF()">
-RREF
-</button>
-
-
-<button type="button" onclick="clearAll()">
-Clear
-</button>
-
-
-</div>
-
-
-
-
-
-
-
-<section>
-
-<h2>Original System</h2>
-
-<div id="originalEquations" class="equations"></div>
-
-</section>
-
-
-
-
-
-
-
-<section class="result-box">
-
-<h2>Result Matrix</h2>
-
-<div id="result"></div>
-
-</section>
-
-
-
-
-
-
-
-<section>
-
-<h2>Solution</h2>
-
-<div id="solutionEquations" class="equations"></div>
-
-</section>
-
-
-
-
-
-
-
-<section class="steps-box">
-
-<h2>Calculation Steps</h2>
-
-<div id="steps"></div>
-
-</section>
-
-
-
-
-</div>
-
-
-
+<footer>
+    <p> &copy; 2026 <b style="color:#ff0000"> Anas Emad </b>. All rights reserved. </p>
+    <div class="footer-links">
+        <a href="mailto:anasemadanas1@gmail.com">
+            Email
+        </a>
+        <a href="https://www.linkedin.com/in/eng-anasemad" target="_blank">
+            LinkedIn
+        </a>
+        <a href="https://www.facebook.com/anasemadanas1" target="_blank">
+            Facebook
+        </a>
+        <a href="https://gitlab.com/anasemadanas1" target="_blank">
+            GitLab
+        </a>
+        <a href="https://github.com/anasemadanas" target="_blank">
+            Github
+        </a>		
+    </div>
+</footer>
+
+<audio id="soundCalculate" src="assets/sounds/btn-calculate.wav"></audio>
+<audio id="soundClick" src="assets/sounds/btn-click.wav"></audio>
+<audio id="soundRemove" src="assets/sounds/btn-remove.wav"></audio>
+<audio id="soundError" src="assets/sounds/error.wav"></audio>
 
 <script src="script.js"></script>
-
-
 </body>
-
 </html>
