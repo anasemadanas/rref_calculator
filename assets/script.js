@@ -1,5 +1,6 @@
 
 let steps=[];
+const EPSILON=1e-10;
 
 //create matrix input table
 function createMatrix(){
@@ -7,7 +8,7 @@ function createMatrix(){
     Number(document.getElementById("rows").value);
 
     let cols =
-    Number(document.getElementById("cols").value);
+    Number(document.getElementById("cols").value) + 1;
 	
     let div=document.getElementById("matrixInput");
     div.innerHTML="";
@@ -112,27 +113,34 @@ function solveRREF(){
 
 function getMatrix(){
 
-    let inputs=
-    document.querySelectorAll(".cell");
+    let inputs = document.querySelectorAll(".cell");
 
-    let rows=
+    let rows =
     Number(document.getElementById("rows").value);
 
-    let cols=
-    Number(document.getElementById("cols").value);
+    let cols =
+    Number(document.getElementById("cols").value) + 1;
+
 
     let matrix=[];
     let index=0;
 
+
     for(let i=0;i<rows;i++){
+
         let row=[];
+
         for(let j=0;j<cols;j++){
+
             row.push(
                 Number(inputs[index++].value)
             );
+
         }
+
         matrix.push(row);
     }
+
     return matrix;
 }
 
@@ -204,6 +212,72 @@ function swapRows(m,a,b){
     m[b]=temp;
 }
 
+function isNearZero(value){
+    return Math.abs(value)<EPSILON;
+}
+
+function cleanRow(row){
+    for(let i=0;i<row.length;i++){
+        if(isNearZero(row[i])){
+            row[i]=0;
+        }
+    }
+}
+
+function findPivotRow(m,startRow,col){
+    let pivot=-1;
+    let maxAbs=EPSILON;
+
+    for(let i=startRow;i<m.length;i++){
+        let value=Math.abs(m[i][col]);
+
+        if(value>maxAbs){
+            maxAbs=value;
+            pivot=i;
+        }
+    }
+
+    return pivot;
+}
+
+function leadingCoefficientIndex(row,variableCount){
+    for(let j=0;j<variableCount;j++){
+        if(!isNearZero(row[j])){
+            return j;
+        }
+    }
+
+    return -1;
+}
+
+function inspectReducedMatrix(matrix){
+    const variables=matrix[0].length-1;
+    const pivotColumns=new Set();
+    const pivotByColumn=new Map();
+    let inconsistent=false;
+
+    for(let i=0;i<matrix.length;i++){
+        const pivotColumn=leadingCoefficientIndex(matrix[i],variables);
+
+        if(pivotColumn===-1){
+            if(!isNearZero(matrix[i][variables])){
+                inconsistent=true;
+            }
+            continue;
+        }
+
+        pivotColumns.add(pivotColumn);
+        pivotByColumn.set(pivotColumn,i);
+    }
+
+    return {
+        variables,
+        pivotColumns,
+        pivotByColumn,
+        inconsistent
+    };
+}
+
 function REF(matrix){
     steps=[];
     let m=copyMatrix(matrix);
@@ -214,12 +288,9 @@ function REF(matrix){
 
     for(let col=0; col<cols && pivotRow<rows; col++){
 
-        let pivot=pivotRow;
+        let pivot=findPivotRow(m,pivotRow,col);
 
-        while(pivot<rows && Math.abs(m[pivot][col])<1e-10)
-            pivot++;
-
-        if(pivot==rows) continue;
+        if(pivot===-1) continue;
 
 
         if(pivot!=pivotRow){
@@ -227,18 +298,32 @@ function REF(matrix){
             saveStep(`Swap R${pivot+1} and R${pivotRow+1}`,m);
         }
 
+        cleanRow(m[pivotRow]);
+
+        let pivotValue=m[pivotRow][col];
+
+        if(isNearZero(pivotValue)){
+            continue;
+        }
+
 
         for(let i=pivotRow+1;i<rows;i++){
 
-            let factor=m[i][col]/m[pivotRow][col];
+            let factor=m[i][col]/pivotValue;
 
-            if(Math.abs(factor)<1e-10)
+            if(isNearZero(factor))
                 continue;
 
 
             for(let j=col;j<m[0].length;j++){
                 m[i][j]-=factor*m[pivotRow][j];
+
+                if(isNearZero(m[i][j])){
+                    m[i][j]=0;
+                }
             }
+
+            cleanRow(m[i]);
 
 
             saveStep(
@@ -259,33 +344,45 @@ function RREF(matrix){
 
     let rows=m.length;
     let cols=m[0].length-1;
+    let inconsistent=false;
+
+    for(let i=0;i<rows;i++){
+
+        let pivot=leadingCoefficientIndex(m[i],cols);
+
+        if(pivot===-1 && !isNearZero(m[i][cols])){
+            inconsistent=true;
+            for(let j=0;j<cols;j++){
+                m[i][j]=0;
+            }
+            m[i][cols]=1;
+        }
+    }
 
 
     for(let i=rows-1;i>=0;i--){
 
-        let pivot=-1;
+        let pivot=leadingCoefficientIndex(m[i],cols);
 
 
-        for(let j=0;j<cols;j++){
-
-            if(Math.abs(m[i][j])>1e-10){
-
-                pivot=j;
-                break;
-            }
-        }
-
-
-        if(pivot==-1)
+        if(pivot===-1)
             continue;
 
 
         let value=m[i][pivot];
 
+        if(isNearZero(value)){
+            continue;
+        }
 
-        // normalize full row including RHS
-        for(let j=0;j<m[0].length;j++){
+
+        // normalize row
+        for(let j=0;j<=cols;j++){
             m[i][j]/=value;
+
+            if(isNearZero(m[i][j])){
+                m[i][j]=0;
+            }
         }
 
 
@@ -295,16 +392,27 @@ function RREF(matrix){
         );
 
 
-        // eliminate above pivot
+        // eliminate above
         for(let r=0;r<i;r++){
 
             let factor=m[r][pivot];
 
 
-            for(let c=0;c<m[0].length;c++){
-                m[r][c]-=
-                factor*m[i][c];
+            if(isNearZero(factor))
+                continue;
+
+
+            for(let c=0;c<=cols;c++){
+
+                m[r][c]-=factor*m[i][c];
+
+                if(isNearZero(m[r][c])){
+                    m[r][c]=0;
+                }
+
             }
+
+            cleanRow(m[r]);
 
 
             saveStep(
@@ -313,6 +421,7 @@ function RREF(matrix){
             );
         }
     }
+
 
     return m;
 }
@@ -441,73 +550,106 @@ function matrixToEquation(matrix){
 }
 
 function analyzeSolution(matrix) {
-    const rows = matrix.length;
-    const variables = matrix[0].length - 1;
-    let pivots = 0;
-    let inconsistent = false;
+    const analysis=inspectReducedMatrix(matrix);
 
-    for (let i = 0; i < rows; i++) {
-        let isZeroRow = true;
-        
-        for (let j = 0; j < variables; j++) {
-            if (Math.abs(matrix[i][j]) > 1e-8) {  
-                isZeroRow = false;
-                
-                // Count pivot (leading 1)
-                if (Math.abs(matrix[i][j] - 1) < 1e-6) {
-                    pivots++;
-                }
-                break;
-            }
-        }
-
-        // Check inconsistency: 0 0 0 | 5
-        if (isZeroRow && Math.abs(matrix[i][variables]) > 1e-8) {
-            inconsistent = true;
-        }
+    if (analysis.inconsistent) {
+        return "No Solution";
     }
 
-    if (inconsistent) return "No Solution (Contradiction)";
-    if (pivots === variables) return "Unique Solution";
+    if (analysis.pivotColumns.size === analysis.variables) {
+        return "Unique Solution";
+    }
+
     return "Infinite Solutions";
 }
 
 function solutionFromRREF(matrix) {
-    const vars = matrix[0].length - 1;
+    const analysis=inspectReducedMatrix(matrix);
+    const variables = analysis.variables;
     const rows = matrix.length;
     const result = [];
+    const formatValue = (value) => {
+        const rounded = Math.round(value * 1000) / 1000;
 
-    // Check inconsistency
-    for (let i = 0; i < rows; i++) {
-        let allZero = true;
-        for (let j = 0; j < vars; j++) {
-            if (Math.abs(matrix[i][j]) > 1e-8) {
-                allZero = false;
-                break;
+        if (Math.abs(rounded) < 1e-10) {
+            return "0";
+        }
+
+        if (Number.isInteger(rounded)) {
+            return String(rounded);
+        }
+
+        return rounded
+            .toFixed(3)
+            .replace(/\.0+$/, "")
+            .replace(/(\.\d*?)0+$/, "$1");
+    };
+
+    if (analysis.inconsistent) {
+        return ["No Solution"];
+    }
+
+    if (analysis.rankA === variables) {
+        for (let col = 0; col < variables; col++) {
+            const row = analysis.pivotByColumn.get(col);
+            if (row === undefined) {
+                return ["Internal Error: Missing pivot."];
+            }
+            result.push(
+                `x${col + 1} = ${formatValue(matrix[row][variables])}`
+            );
+        }
+        return result;
+    }
+
+    const freeColumns = [];
+    for (let col = 0; col < variables; col++) {
+        if (!analysis.pivotColumns.has(col)) {
+            freeColumns.push(col);
+        }
+    }
+
+    const parameterNames = freeColumns.map((_, index) => `t${index + 1}`);
+    const parameterByColumn = new Map();
+
+    for (let i = 0; i < freeColumns.length; i++) {
+        parameterByColumn.set(freeColumns[i], parameterNames[i]);
+        result.push(`x${freeColumns[i] + 1} = ${parameterNames[i]}`);
+    }
+
+    for (let col = 0; col < variables; col++) {
+        if (parameterByColumn.has(col)) {
+            continue;
+        }
+
+        const row = analysis.pivotByColumn.get(col);
+        if (row === undefined) {
+            result.push(`x${col + 1} = 0`);
+            continue;
+        }
+
+        let expression = formatValue(matrix[row][variables]);
+
+        for (let i = 0; i < freeColumns.length; i++) {
+            const freeColumn = freeColumns[i];
+            const coefficient = -matrix[row][freeColumn];
+
+            if (Math.abs(coefficient) < 1e-10) {
+                continue;
+            }
+
+            const parameterName = parameterNames[i];
+            const magnitude = Math.abs(coefficient) === 1 ? "" : formatValue(Math.abs(coefficient));
+            const term = `${magnitude}${parameterName}`;
+
+            if (coefficient > 0) {
+                expression += ` + ${term}`;
+            } else {
+                expression += ` - ${term}`;
             }
         }
-        if (allZero && Math.abs(matrix[i][vars]) > 1e-8) {
-            return ["No Solution (Inconsistent System)"];
-        }
-    }
 
-    // Extract solutions
-    for (let i = 0; i < rows; i++) {
-        for (let j = 0; j < vars; j++) {
-            if (Math.abs(matrix[i][j] - 1) < 1e-6) {  
-                let rhs = decimalToFraction(matrix[i][vars]);
-                result.push(`x${j + 1} = ${rhs}`);
-                break;
-            }
-        }
-    }
-
-    if (result.length === 0) {
-        return ["Infinite Solutions (all variables are free)"];
-    }
-    
-    if (result.length < vars) {
-        result.push(`<strong>Infinite Solutions</strong> — ${vars - result.length} free variable(s)`);
+        result.push(`x${col + 1} = ${expression}`);
     }
 
     return result;
