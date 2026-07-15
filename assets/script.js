@@ -303,7 +303,7 @@ function findPivotRow(m, startRow, col) {
         }
     }
 
-    return -1; // العمود كله أصفار
+    return -1; 
 }
 
 function leadingCoefficientIndex(row,variableCount){
