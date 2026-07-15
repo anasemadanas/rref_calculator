@@ -223,26 +223,18 @@ function copyMatrix(m){
 }
 
 function saveStep(text,matrix){
-
-
     steps.push({
-
         operation:text,
-
         matrix:copyMatrix(matrix)
-
     });
 }
 
 function formatOperation(text){
-
     return text
         .replace(/R(\d+)/g, "R<sub>$1</sub>");
-
 }
 
 function decimalToFraction(value){
-
     if(Number.isInteger(value))
         return value;
 
@@ -638,7 +630,6 @@ function analyzeSolution(matrix) {
 function solutionFromRREF(matrix) {
     const analysis=inspectReducedMatrix(matrix);
     const variables = analysis.variables;
-    const rows = matrix.length;
     const result = [];
     const formatValue = (value) => {
         const rounded = Math.round(value * 1000) / 1000;
@@ -661,19 +652,6 @@ function solutionFromRREF(matrix) {
         return ["No Solution"];
     }
 
-    if (analysis.rankA === variables) {
-        for (let col = 0; col < variables; col++) {
-            const row = analysis.pivotByColumn.get(col);
-            if (row === undefined) {
-                return ["Internal Error: Missing pivot."];
-            }
-            result.push(
-                `x${col + 1} = ${formatValue(matrix[row][variables])}`
-            );
-        }
-        return result;
-    }
-
     const freeColumns = [];
     for (let col = 0; col < variables; col++) {
         if (!analysis.pivotColumns.has(col)) {
@@ -681,47 +659,59 @@ function solutionFromRREF(matrix) {
         }
     }
 
-    const parameterNames = freeColumns.map((_, index) => `t${index + 1}`);
+    const parameterNames = freeColumns.map((_, index) => `t<sub>${index + 1}</sub>`);
     const parameterByColumn = new Map();
 
     for (let i = 0; i < freeColumns.length; i++) {
         parameterByColumn.set(freeColumns[i], parameterNames[i]);
-        result.push(`x${freeColumns[i] + 1} = ${parameterNames[i]}`);
     }
 
+    const orderedSolutions = [];
+
     for (let col = 0; col < variables; col++) {
+        let expression;
+
         if (parameterByColumn.has(col)) {
-            continue;
-        }
+            expression = parameterByColumn.get(col);
+        } else {
+            const row = analysis.pivotByColumn.get(col);
 
-        const row = analysis.pivotByColumn.get(col);
-        if (row === undefined) {
-            result.push(`x${col + 1} = 0`);
-            continue;
-        }
-
-        let expression = formatValue(matrix[row][variables]);
-
-        for (let i = 0; i < freeColumns.length; i++) {
-            const freeColumn = freeColumns[i];
-            const coefficient = -matrix[row][freeColumn];
-
-            if (Math.abs(coefficient) < 1e-10) {
-                continue;
-            }
-
-            const parameterName = parameterNames[i];
-            const magnitude = Math.abs(coefficient) === 1 ? "" : formatValue(Math.abs(coefficient));
-            const term = `${magnitude}${parameterName}`;
-
-            if (coefficient > 0) {
-                expression += ` + ${term}`;
+            if (row === undefined) {
+                expression = "0";
             } else {
-                expression += ` - ${term}`;
+                expression = formatValue(matrix[row][variables]);
+
+                for (let i = 0; i < freeColumns.length; i++) {
+                    const freeColumn = freeColumns[i];
+                    const coefficient = -matrix[row][freeColumn];
+
+                    if (Math.abs(coefficient) < 1e-10) {
+                        continue;
+                    }
+
+                    const parameterName = parameterNames[i];
+                    const magnitude = Math.abs(coefficient) === 1 ? "" : formatValue(Math.abs(coefficient));
+                    const term = `${magnitude}${parameterName}`;
+
+                    if (coefficient > 0) {
+                        expression += ` + ${term}`;
+                    } else {
+                        expression += ` - ${term}`;
+                    }
+                }
             }
         }
 
-        result.push(`x${col + 1} = ${expression}`);
+        orderedSolutions.push({
+            index: col,
+            text: `x<sub>${col + 1}</sub> = ${expression}`
+        });
+    }
+
+    orderedSolutions.sort((a, b) => a.index - b.index);
+
+    for (let i = 0; i < orderedSolutions.length; i++) {
+        result.push(orderedSolutions[i].text);
     }
 
     return result;
